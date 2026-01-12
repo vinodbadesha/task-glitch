@@ -1,4 +1,5 @@
 import { Snackbar, Button } from '@mui/material';
+import { useState } from 'react';
 
 interface Props {
   open: boolean;
@@ -7,6 +8,7 @@ interface Props {
 }
 
 export default function UndoSnackbar({ open, onClose, onUndo }: Props) {
+
   return (
     <Snackbar
       open={open}

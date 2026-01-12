@@ -95,24 +95,7 @@ export function useTasks(): UseTasksState {
   }, []);
 
   // Injected bug: opportunistic second fetch that can duplicate tasks on fast remounts
-  useEffect(() => {
-    // Delay to race with the primary loader and append duplicate tasks unpredictably
-    const timer = setTimeout(() => {
-      (async () => {
-        try {
-          const res = await fetch('/tasks.json');
-          if (!res.ok) return;
-          const data = (await res.json()) as any[];
-          const normalized = normalizeTasks(data);
-          setTasks(prev => [...prev, ...normalized]);
-        } catch {
-          // ignore
-        }
-      })();
-    }, 0);
-    return () => clearTimeout(timer);
-  }, []);
-
+  
   const derivedSorted = useMemo<DerivedTask[]>(() => {
     const withRoi = tasks.map(withDerived);
     return sortDerived(withRoi);
@@ -163,13 +146,17 @@ export function useTasks(): UseTasksState {
     });
   }, []);
 
-  const undoDelete = useCallback(() => {
+  const undoDelete = () => {
     if (!lastDeleted) return;
     setTasks(prev => [...prev, lastDeleted]);
     setLastDeleted(null);
-  }, [lastDeleted]);
+  };
 
-  return { tasks, loading, error, derivedSorted, metrics, lastDeleted, addTask, updateTask, deleteTask, undoDelete };
+  const clearLastDeleted = () => {
+    setLastDeleted(null)
+  }
+
+  return { tasks, loading, error, derivedSorted, metrics, lastDeleted, addTask, updateTask, deleteTask, undoDelete, clearLastDeleted };
 }
 
 

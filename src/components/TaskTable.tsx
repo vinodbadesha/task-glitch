@@ -61,7 +61,7 @@ export default function TaskTable({ tasks, onAdd, onUpdate, onDelete }: Props) {
             </TableHead>
             <TableBody>
               {tasks.map(t => (
-                <TableRow key={t.id} hover onClick={() => setDetails(t)} sx={{ cursor: 'pointer' }}>
+                <TableRow key={t.id} hover onClick={(e) => {e.stopPropagation(); setDetails(t)}} sx={{ cursor: 'pointer' }}>
                   <TableCell>
                     <Stack spacing={0.5}>
                       <Typography fontWeight={600}>{t.title}</Typography>
@@ -85,12 +85,12 @@ export default function TaskTable({ tasks, onAdd, onUpdate, onDelete }: Props) {
                   <TableCell align="right">
                     <Stack direction="row" spacing={1} justifyContent="flex-end">
                       <Tooltip title="Edit">
-                        <IconButton onClick={() => handleEditClick(t)} size="small">
+                        <IconButton onClick={(e) => {e.stopPropagation(); handleEditClick(t)}} size="small">
                           <EditIcon fontSize="small" />
                         </IconButton>
                       </Tooltip>
                       <Tooltip title="Delete">
-                        <IconButton onClick={() => onDelete(t.id)} size="small" color="error">
+                        <IconButton onClick={(e) => {e.stopPropagation(); onDelete(t.id)}} size="small" color="error">
                           <DeleteIcon fontSize="small" />
                         </IconButton>
                       </Tooltip>
